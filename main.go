@@ -49,7 +49,7 @@ func main() {
 		panic(err)
 	}
 	log.Printf("Body: %s\n", string(bodyBytes))
-	err = json.Unmarshal([]byte(string(bodyBytes)), &record)
+	err = json.Unmarshal(bodyBytes, &record)
 	if err != nil {
 		panic(err)
 	}
