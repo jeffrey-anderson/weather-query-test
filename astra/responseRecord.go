@@ -1,4 +1,4 @@
-package model
+package astra
 
 type RespParams struct {
 	Key   string  `json:"key"`

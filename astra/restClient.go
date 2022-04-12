@@ -40,13 +40,12 @@ func GetForecastForLocation(location string, dataDate string) ([]model.DbRecord,
 		panic(fmt.Sprintf("unexpected status: got %v", res.Status))
 	}
 
-	record := new(model.ResponseRecord)
-
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
+	record := new(ResponseRecord)
 	err = json.Unmarshal(bodyBytes, &record)
 	if err != nil {
 		return nil, err
