@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/uber/h3-go"
+	"log"
 	"math/rand"
 	"time"
 	"web-client/astra"
@@ -14,8 +15,12 @@ var sampleSize = flag.Int("sampleSize", 100, "the number of samples to test")
 
 func main() {
 	flag.Parse()
+	log.Println("Starting...")
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var ttlTime time.Duration
+
+	noMatchCount := 0
+	matchCount := 0
 
 	for i := 0; i < *sampleSize; i++ {
 		lat := (r.Float64() * 180) - 90
@@ -27,10 +32,14 @@ func main() {
 		end := time.Now()
 		ttlTime = ttlTime + end.Sub(start)
 		if loc == nil {
-			fmt.Printf("No match found for %#v\n", point)
+			fmt.Printf("No match found for %#v\n", h3.ToString(point))
+			noMatchCount = noMatchCount + 1
+		} else {
+			// fmt.Printf("Match found for %#v\n", h3.ToString(point))
+			matchCount = matchCount + 1
 		}
 	}
 
-	fmt.Printf("Found %d matches in %s. Average time %s\n", *sampleSize, ttlTime, ttlTime/time.Duration(*sampleSize))
+	log.Printf("Hits: %d, Misses %d in %s. Average time %s\n", matchCount, noMatchCount, ttlTime, ttlTime/time.Duration(*sampleSize))
 
 }
