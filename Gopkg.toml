@@ -1,0 +1,5 @@
+[prune]
+	[[prune.project]]
+		name = "github.com/uber/h3-go"
+		non-go = false
+		unused-packages = false
