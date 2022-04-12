@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: query-test-job
+spec:
+  completions: 1
+  template:
+    spec:
+      containers:
+        - name: query-test-job
+          image: datadaddy/weather-query-test:0.1
+          command: ["/bin/sh", "-c"]
+          args: ["query-test -sampleSize 100"]
+          env:
+            - name: ASTRA_DB_APPLICATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: astra-db-app-token
+                  key: token
+            - name: ASTRA_DB_ID
+              value: '03041654-14fb-4f2e-9c4c-5c71d7af0eb1'
+            - name: ASTRA_DB_REGION
+              value: 'us-east-1'
+            - name: ASTRA_DB_KEYSPACE
+              value: 'weather'
+      restartPolicy: Never
